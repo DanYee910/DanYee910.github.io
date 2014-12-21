@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Daniel Yee&#8217;s Blog</title>
+  <title>Javascript Thoughts - Daniel Yee&#8217;s Blog</title>
   <meta name="author" content="Daniel Yee">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://danyee910.github.io">
+  <link rel="canonical" href="http://danyee910.github.io/blog/2014/08/22/js">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Daniel Yee's Blog" type="application/atom+xml">
@@ -63,15 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/08/22/js/">Javascript Thoughts</a></h1>
+      <h1 class="entry-title">Javascript Thoughts</h1>
     
     
       <p class="meta">
@@ -87,7 +84,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Javascript thoughts</p>
+<div class="entry-content"><p>Javascript thoughts</p>
 
 <p>Why is Javascript so popular? Originally created by Netscape, over the years it has become the defacto standard for the web.  In short, to add any kind of extra functionality over the web over the basic static web page, it is going to be very difficult to avoid bumping into Javascript.  It allows interactions with the user, dynamic web page content, and a whole host of expanded functions.  The trump card for Javascript over potential competitors is it&rsquo;s entrenchment, it is universally adopted and standard across so many platforms and browsers.</p>
 
@@ -95,95 +92,46 @@
 
 <p>What are the limitations?  Despite being a virtual standard in the industry, there are so many environments to run on that there will be rendering differences across certain platforms.  A large issue with Javascript stems from it&rsquo;s access to the DOM and html.  In addition to provided expanded functionality, it also opens the door for security vulnerabilites.  Malicious scripts could potentially be run on client computers through JS and the DOM.  For the programmer, Javascript is a bit verbose and unforgiving of syntatic errors, such as missing the semicolon end line.  It does demand a certain amount of discipline to program.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Yee</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-08-22T05:59:00-07:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>5:59 am</span></time>
+      
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2014/08/14/firstblog/">CSS Classes Versus IDs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-14T05:59:00-07:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:59 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>CSS classes and IDs are two different ways to categorize and specify parts of your html.  They are functionally very similar, but differ in several important ways that affect how you choose to use them.</p>
-
-<p>For similarities, they both let you identify a tag with a label, so you can specifically target it with css.  By default html and css do nothing to IDs and classes, unless you specify something.</p>
-
-<p>Where they differ is in scope.  IDs are UNIQUE and you can only use them once.  There can only be one element of a given ID at any time.  Classes can be used many times, you can use classes to target many elements all over the page with css.</p>
-
-<p>Here is an example of both in use:</p>
-
-<!-- ``` [language] [title] [url] [link text] -->
-
-
-
-
-<figure class='code'><figcaption><span>Classes vs. Ids Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;awesomegames&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ul&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;favgames&quot;</span><span class="nt">&gt;</span>Final Fantasy<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;favgames&quot;</span><span class="nt">&gt;</span>League of Legends<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;favgames&quot;</span><span class="nt">&gt;</span>Starcraft<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;othergames&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ul&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;notmyfavgames&quot;</span><span class="nt">&gt;</span>Big Rigs: Over the Road Racing<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;notmyfavgames&quot;</span><span class="nt">&gt;</span>Skate 3<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;notmyfavgames&quot;</span><span class="nt">&gt;</span>Surgeon Simulator<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Suppose we want to differentiate the tables (well I&rsquo;m using the divs as &ldquo;tables&rdquo;), maybe give the table of our favorite games more emphasis, like a bigger font, different background color, etc&hellip;  We can give that table &lsquo;id=&ldquo;awesomegames&rdquo;&rsquo;, and the second table a different ID.  That way the &ldquo;awesomegames&rdquo; table can have it&rsquo;s own format separate from &ldquo;othergames&rdquo;.  Without the IDs, they are both tables and it&rsquo;s not as easy to pick one out without affecting both.</p>
-
-<p>Now within &ldquo;awesomegames&rdquo;, we have 3 elements, but since they&rsquo;re all equally awesome, we want them to share format with each other.  So we can use class, and give them all the same class.  When we apply css to the class, they all inherit the traits.  We give the other games a different class, and they will share those different traits.</p>
-
-<p>Classes and IDs both gives you ways to label code.  The big difference: Use IDs for unique elements, use classes for groups that want to share the same css.</p>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://danyee910.github.io/blog/2014/08/22/js/" data-via="" data-counturl="http://danyee910.github.io/blog/2014/08/22/js/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/14/firstblog/" title="Previous Post: CSS Classes versus IDs">&laquo; CSS Classes versus IDs</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -236,6 +184,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

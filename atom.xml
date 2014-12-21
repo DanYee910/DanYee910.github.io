@@ -4,7 +4,7 @@
   <title><![CDATA[Daniel Yee's Blog]]></title>
   <link href="http://danyee910.github.io/atom.xml" rel="self"/>
   <link href="http://danyee910.github.io/"/>
-  <updated>2014-12-21T15:34:50-08:00</updated>
+  <updated>2014-12-21T15:55:17-08:00</updated>
   <id>http://danyee910.github.io/</id>
   <author>
     <name><![CDATA[Daniel Yee]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Thoughts]]></title>
+    <link href="http://danyee910.github.io/blog/2014/08/22/js/"/>
+    <updated>2014-08-22T05:59:00-07:00</updated>
+    <id>http://danyee910.github.io/blog/2014/08/22/js</id>
+    <content type="html"><![CDATA[<p>Javascript thoughts</p>
+
+<p>Why is Javascript so popular? Originally created by Netscape, over the years it has become the defacto standard for the web.  In short, to add any kind of extra functionality over the web over the basic static web page, it is going to be very difficult to avoid bumping into Javascript.  It allows interactions with the user, dynamic web page content, and a whole host of expanded functions.  The trump card for Javascript over potential competitors is it&rsquo;s entrenchment, it is universally adopted and standard across so many platforms and browsers.</p>
+
+<p>What are Javascript&rsquo;s strengths? Certainly there must be a reason for it&rsquo;s wide adoption and use.  Javascript has quite a number of things in it&rsquo;s favor.  By interacting with html through the Document Object Model (DOM), Javascript allows websites to do many things on a browser that html alone cannot, such as interact with the user, control the browser, and alter displayed content.  Not only does it make websites more interactive this way, JS scripts are also run clientside as well so they are fast and responsive, and not stressful on the servers.  Javascript can also be used for serverside functionality like creating games and web apps.  As a scripting language, Javascript is relatively close to English and not too difficult for a novice to learn.  As mentioned earlier, it is now so widely adopted and universal, it is an essential part of web programming.</p>
+
+<p>What are the limitations?  Despite being a virtual standard in the industry, there are so many environments to run on that there will be rendering differences across certain platforms.  A large issue with Javascript stems from it&rsquo;s access to the DOM and html.  In addition to provided expanded functionality, it also opens the door for security vulnerabilites.  Malicious scripts could potentially be run on client computers through JS and the DOM.  For the programmer, Javascript is a bit verbose and unforgiving of syntatic errors, such as missing the semicolon end line.  It does demand a certain amount of discipline to program.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CSS Classes Versus IDs]]></title>
