@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[Daniel Yee's Blog]]></title>
   <link href="http://danyee910.github.io/atom.xml" rel="self"/>
   <link href="http://danyee910.github.io/"/>
-  <updated>2014-12-21T14:38:50-08:00</updated>
+  <updated>2014-12-21T15:34:50-08:00</updated>
   <id>http://danyee910.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Daniel Yee]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CSS Classes Versus IDs]]></title>
+    <link href="http://danyee910.github.io/blog/2014/08/14/firstblog/"/>
+    <updated>2014-08-14T05:59:00-07:00</updated>
+    <id>http://danyee910.github.io/blog/2014/08/14/firstblog</id>
+    <content type="html"><![CDATA[<p>CSS classes and IDs are two different ways to categorize and specify parts of your html.  They are functionally very similar, but differ in several important ways that affect how you choose to use them.</p>
+
+<p>For similarities, they both let you identify a tag with a label, so you can specifically target it with css.  By default html and css do nothing to IDs and classes, unless you specify something.</p>
+
+<p>Where they differ is in scope.  IDs are UNIQUE and you can only use them once.  There can only be one element of a given ID at any time.  Classes can be used many times, you can use classes to target many elements all over the page with css.</p>
+
+<p>Here is an example of both in use:</p>
+
+<!-- ``` [language] [title] [url] [link text] -->
+
+
+
+
+<figure class='code'><figcaption><span>Classes vs. Ids Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;awesomegames&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;favgames&quot;</span><span class="nt">&gt;</span>Final Fantasy<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;favgames&quot;</span><span class="nt">&gt;</span>League of Legends<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;favgames&quot;</span><span class="nt">&gt;</span>Starcraft<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;othergames&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;notmyfavgames&quot;</span><span class="nt">&gt;</span>Big Rigs: Over the Road Racing<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;notmyfavgames&quot;</span><span class="nt">&gt;</span>Skate 3<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;notmyfavgames&quot;</span><span class="nt">&gt;</span>Surgeon Simulator<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Suppose we want to differentiate the tables (well I&rsquo;m using the divs as &ldquo;tables&rdquo;), maybe give the table of our favorite games more emphasis, like a bigger font, different background color, etc&hellip;  We can give that table &lsquo;id=&ldquo;awesomegames&rdquo;&rsquo;, and the second table a different ID.  That way the &ldquo;awesomegames&rdquo; table can have it&rsquo;s own format separate from &ldquo;othergames&rdquo;.  Without the IDs, they are both tables and it&rsquo;s not as easy to pick one out without affecting both.</p>
+
+<p>Now within &ldquo;awesomegames&rdquo;, we have 3 elements, but since they&rsquo;re all equally awesome, we want them to share format with each other.  So we can use class, and give them all the same class.  When we apply css to the class, they all inherit the traits.  We give the other games a different class, and they will share those different traits.</p>
+
+<p>Classes and IDs both gives you ways to label code.  The big difference: Use IDs for unique elements, use classes for groups that want to share the same css.</p>
+]]></content>
+  </entry>
   
 </feed>
