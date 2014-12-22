@@ -4,7 +4,7 @@
   <title><![CDATA[Daniel Yee's Blog]]></title>
   <link href="http://danyee910.github.io/atom.xml" rel="self"/>
   <link href="http://danyee910.github.io/"/>
-  <updated>2014-12-21T15:55:17-08:00</updated>
+  <updated>2014-12-21T16:37:20-08:00</updated>
   <id>http://danyee910.github.io/</id>
   <author>
     <name><![CDATA[Daniel Yee]]></name>
@@ -12,6 +12,86 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby's Enumerable#cycle Method]]></title>
+    <link href="http://danyee910.github.io/blog/2014/08/30/rubycycle/"/>
+    <updated>2014-08-30T00:00:00-07:00</updated>
+    <id>http://danyee910.github.io/blog/2014/08/30/rubycycle</id>
+    <content type="html"><![CDATA[<p>Ruby&rsquo;s collection objects include and use the Enumerable Module.  This module provides the class with various behaviors, as long as that class has a method .each defined for it.  This allows the collection to feed it&rsquo;s elements into a following block.  Among many Enumerable methods I know very little about, is cycle. I would like to look more closely at this method and examine potential uses.</p>
+
+<p>At first reading, Enumberable#cycle seems conceptually very simple and straightforward.  It will pass all elements of the object to the following block in a loop, to infinity unless told otherwise.  If you provide an integer argument to cycle, it will repeat the object that many times.  Using cycle, you can iterate over the entire object as many times as you wish.  If cycle does not get passed a block, it will return an Enumerator object.</p>
+
+<p>For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">arr</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">b</span>
+</span><span class='line'><span class="c1">#=&gt; [1,2,3,1,2,3,1,2,3]</span>
+</span><span class='line'><span class="n">c</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">cycle</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">c</span>
+</span><span class='line'><span class="c1">#=&gt; [1,2,3,1,2,3,1,2,3...forever]</span>
+</span><span class='line'><span class="c1">#=&gt; Enumerator: [1,2,3]:cycle</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#b is simply arr repeated/cycled 3 times.</span>
+</span><span class='line'><span class="c1">#c is arr cycled to infinity.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It seems simple enough to see what cycle is doing, but how would we use it?  Cycle is useful for repeating events over and over, certain things I do see repeating themselves like this: Time such as months of the year, days of the week, etc&hellip;, or playing cards in, lets say a 6 deck Blackjack shoe.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">days</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;Mon&quot;</span><span class="p">,</span><span class="s2">&quot;Tues&quot;</span><span class="p">,</span><span class="s2">&quot;Weds&quot;</span><span class="p">,</span><span class="s2">&quot;Thurs&quot;</span><span class="p">,</span><span class="s2">&quot;Fri&quot;</span><span class="p">,</span><span class="s2">&quot;Sat&quot;</span><span class="p">,</span><span class="s2">&quot;Sun&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="n">calendar</span> <span class="o">=</span> <span class="n">days</span><span class="o">.</span><span class="n">cycle</span>
+</span><span class='line'><span class="n">days</span><span class="o">.</span><span class="n">next</span>
+</span><span class='line'><span class="c1">#=&gt; &quot;Mon&quot;</span>
+</span><span class='line'><span class="n">days</span><span class="o">.</span><span class="n">next</span>
+</span><span class='line'><span class="c1">#=&gt; &quot;Tues&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">suits</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;diamonds&quot;</span><span class="p">,</span><span class="s2">&quot;clubs&quot;</span><span class="p">,</span><span class="s2">&quot;hearts&quot;</span><span class="p">,</span><span class="s2">&quot;spades&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s2">&quot;J&quot;</span><span class="p">,</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span><span class="s2">&quot;K&quot;</span><span class="p">,</span><span class="s2">&quot;A&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="n">six_decks</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="n">make_six_decks</span> <span class="o">=</span> <span class="n">suits</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">values</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">six_decks</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">v</span><span class="si">}#{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">shuffled_six_decks</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">decks</span><span class="o">.</span><span class="n">shuffle</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Overall I feel like cycle is an abbreviated way of looping elements over and over.  What could have been done with while or for loops and incremental counters is packaged into this one method.  I feel like I&rsquo;m barely scratching the surface of what cycle can do, but at least I won&rsquo;t be completely in the dark the next time I see it.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript Thoughts]]></title>
