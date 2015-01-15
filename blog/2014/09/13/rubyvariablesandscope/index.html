@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Variables and Scope in Ruby - Daniel Yee&#8217;s Blog</title>
+  <meta name="author" content="Daniel Yee">
+
+  
+  <meta name="description" content="Variable scope refers to where in a program a particular variable is accessible. Ruby has several different kinds of characters with different scope &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danyee910.github.io/blog/2014/09/13/rubyvariablesandscope">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Daniel Yee's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daniel Yee&#8217;s Blog</a></h1>
+  
+    <h2>My Coding and Web Dev Blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="danyee910.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Variables and Scope in Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-13'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Variable scope refers to where in a program a particular variable is accessible.  Ruby has several different kinds of characters with different scope, each warrants considerations in how and when to use them.  Ruby has local, global, instance, and class variables.</p>
+
+<p>Local variable:</p>
+
+<p>These variables are &ldquo;local&rdquo; to the contruct in which they are defined.  They begin with a lowercase letter or underscore.  Top level/outside of all definitions is one local scope, classes and modules are a different scope, and methods are yet another scope.  Nesting in layers creates yet more local scopes.  Variables using the same name will not conflict with each other as long as their local scopes are distinct and separate.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">C</span>
+</span><span class='line'>    <span class="n">local_a</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">some_method</span>
+</span><span class='line'>        <span class="n">local_a</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="s2">&quot;from class local scope: </span><span class="si">#{</span><span class="n">local_a</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s2">&quot;from method inside the class: </span><span class="si">#{</span><span class="n">local_a</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">newC</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">newC</span><span class="o">.</span><span class="n">some_method</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># &quot;from method inside the class: 1&quot;</span>
+</span><span class='line'><span class="c1"># &quot;from class local scope: 2&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Global variable:</p>
+
+<p>These variables are accessible anywhere in the program once defined, and are prefixed with a $.  While sounding convenient, it is better practice to limit usage of global variables.  Since Ruby is object oriented, it is built around the concept of objects passing messages to each other.  Global variables conflict with general practices of trying to separate code into objects, and the wide accessibility makes it tough to compartmentalize code.  Simply put, too many objects know of it&rsquo;s existence and it has too much reach in your program.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$gVar</span> <span class="o">=</span> <span class="s2">&quot;defined outside class&quot;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">G</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">print_g</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="vg">$gVar</span>
+</span><span class='line'>        <span class="vg">$gVar</span> <span class="o">=</span> <span class="s2">&quot;yet accessible everywhere!&quot;</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="vg">$gVar</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">newG</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">newG</span><span class="o">.</span><span class="n">print_g</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># &quot;defined outside class&quot;</span>
+</span><span class='line'><span class="c1"># &quot;yet accessible everywhere!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Class variable:</p>
+
+<p>A variable that is shared by all instances of a class.  Defined with a @@ prefix, it is visible to all instances of the class but not to anything outside.  If this variable changes it changes for all instances.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Cars</span>
+</span><span class='line'>    <span class="vc">@@color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">change_color</span>
+</span><span class='line'>        <span class="vc">@@color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">print_color</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="vc">@@color</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ford</span> <span class="o">=</span> <span class="no">Cars</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">ford</span><span class="o">.</span><span class="n">print_color</span>
+</span><span class='line'><span class="c1"># &quot;red&quot;</span>
+</span><span class='line'><span class="n">ford</span><span class="o">.</span><span class="n">change_color</span>
+</span><span class='line'><span class="n">ford</span><span class="o">.</span><span class="n">print_color</span>
+</span><span class='line'><span class="c1"># &quot;blue&quot;</span>
+</span><span class='line'><span class="n">honda</span> <span class="o">=</span> <span class="no">Cars</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">honda</span><span class="o">.</span><span class="n">print_color</span>
+</span><span class='line'><span class="c1"># &quot;blue&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instance variables:</p>
+
+<p>These variables are local and specific to a class instance object.  Each instance object will have it&rsquo;s own instance variable tied to it&rsquo;s existence.  Prefixed with a @, if an instance variable is changed it is changed for only that one instance and the other objects are unaffected, even if they have instance variables with the same name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Planes</span>
+</span><span class='line'>    <span class="kp">attr_accessor</span> <span class="ss">:color</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+</span><span class='line'>        <span class="vi">@color</span> <span class="o">=</span> <span class="n">color</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">boeing747</span> <span class="o">=</span> <span class="no">Planes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">concorde</span> <span class="o">=</span> <span class="no">Planes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">boeing747</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">p</span> <span class="n">boeing747</span><span class="o">.</span><span class="n">color</span>
+</span><span class='line'><span class="c1"># &quot;red&quot;</span>
+</span><span class='line'><span class="nb">p</span> <span class="n">concorde</span><span class="o">.</span><span class="n">color</span>
+</span><span class='line'><span class="c1"># &quot;blue&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Why do we care about scope?  For purposes of organization, clean code, and debugging, variable scope is important.  You generally want to make variables with the appropriate scope, so the objects and methods that use those variables can access them while they are still unknown to all else.  Since nearly everything in Ruby is an object, you want to limit each object&rsquo;s knowledge of variables to only the ones it will need.  Using variables with unnecessarily wide scope can lead to bugs that are harder to track and more difficult to fix.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Yee</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-09-13'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://danyee910.github.io/blog/2014/09/13/rubyvariablesandscope/" data-via="" data-counturl="http://danyee910.github.io/blog/2014/09/13/rubyvariablesandscope/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/09/04/rubyclasses/" title="Previous Post: Using Classes with Game Items">&laquo; Using Classes with Game Items</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/09/18/SQLinjection/" title="Next Post: SQL Injection">SQL Injection &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/24/PRNGs/">Pseudo-Random Number Generators</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/18/SQLinjection/">SQL Injection</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/rubyvariablesandscope/">Variables and Scope in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/04/rubyclasses/">Using Classes With Game Items</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/30/rubycycle/">Ruby&#8217;s Enumerable#cycle Method</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/danyee910">@danyee910</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'danyee910',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Daniel Yee -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

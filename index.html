@@ -9,7 +9,7 @@
   <meta name="author" content="Daniel Yee">
 
   
-  <meta name="description" content="Ruby&rsquo;s collection objects include and use the Enumerable Module. This module provides the class with various behaviors, as long as that class &hellip;">
+  <meta name="description" content="This topic was introduced to me by a friend many months ago, and I find it fascinating in it&rsquo;s importance, simplicity, and also difficulty. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,477 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/24/PRNGs/">Pseudo-Random Number Generators</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-24'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This topic was introduced to me by a friend many months ago, and I find it fascinating in it&rsquo;s importance, simplicity, and also difficulty.  Random numbers, surely something so simple  doesn&rsquo;t warrant your time to read about it.  Here is what happens when fake randomness is figured out:</p>
+
+<p><img src="/images/LARSON16.jpg" alt="Larson" /></p>
+
+<p>Yea he has so much money the dollar sign doesn&rsquo;t even display anymore.</p>
+
+<p>Given the capabilities of computers to solve both small and large problems in all parts of life, at some point there will be a need to simulate randomness.  The problem is computers are very good at following the directions you give them, but by design they are entirely predictable.  Asking a computer to do something truly random, is something they are not designed to do.  True randomness in nature can be found in radioactive decay, radio static, or atmospheric noise.  How do you get a predictable computer to act randomly? Programmers can &ldquo;simulate&rdquo; randomness with complex algorithms to generate numbers that are &ldquo;close&rdquo; to random.</p>
+
+<p>Pseudo-Random Number Generators(PRNGs):  PRNGs are typically built around mathematical algorithms that produce seemingly random sequences of numbers.  PRNGs are very efficient, they can generate large amounts of nearly random numbers in a short length of time.  A &ldquo;seed&rdquo; value is the initial state that is run through the PRNG algorithm to give a &ldquo;random&rdquo; result.  This is important because by their nature, PRNGs are &ldquo;deterministic&rdquo;, if you know the seed that started a sequence you can reproduce it later in time.  In some cases that can be a desirable attribute, for instance you can run the same computer simulation several times if needed.  Another property of PRNGs is &ldquo;periodicity&rdquo;, given enough time a given sequence will reappear which obviously wouldn&rsquo;t be very random.  Well crafted PRNGs have extremely long periods such that this is not a problem.</p>
+
+<p>So to recap, PRNGs are &ldquo;almost random&rdquo;, and are:</p>
+
+<ul>
+<li>Efficient - They can generate large amounts of numbers quickly.</li>
+<li>Deterministic - Given a known seed they are reproducible.</li>
+<li>Periodic - It will eventually repeat itself.</li>
+</ul>
+
+
+<p>While not perfect for every use, PRNGs are a powerful tool that have many applications.  PRNGs are widely used in simulations, models, games, and cryptography.  Cryptography requires PRNGs of a much higher standard, called cryptographically secure pseudorandom number generators.  CSPRNGs must not only possess a high degree of near randomness, but the algorithm must be resilient to attack even if the attacker has partial knowledge of the initial state/seed.  That brings up an important point, a PRNG is only as good as it&rsquo;s algorithm, and poorly done PRNGs can lead to disaster.</p>
+
+<p>When PRNGs go wrong, the consequences can be severe.  One of the most infamous examples is the Planet Poker website and it&rsquo;s Texas Holdem game.  With real money at stake, PP&rsquo;s business hinged on being able to produce true randomness like in a casino setting.  The snowball that got everything rolling was PP publishing it&rsquo;s shuffling algorithm to reassure players of it&rsquo;s fairness.  Upon seeing this code, a team of security researchers were convinced it was flawed and set about cracking the RNG behind it.  A real deck of 52 cards has a 52! number of possible shuffles, a staggeringly huge number of possibilities.  PP&rsquo;s algorithm used the clock as a seed, and the researchers realized the algorithm results in only around 200,000 shuffles, while large it is nowhere near as large as 52 real cards.  They created a program that takes the player&rsquo;s 2 known cards, plus the 3 revealed cards from the flop.  Knowing only those 5 cards, the program searched through the 200,000 possible shuffles to find the initial state.  Once found, the program could determine every other player&rsquo;s hand, as well as the upcoming turn and river cards.  A PRNG doesn&rsquo;t get anymore cracked than that.  The researchers went public with their findings, and Planet Poker was publicly humilated.
+<img src="/images/poker3.jpg" alt="Poker" /></p>
+
+<p>I hope this cursory look at randomness and PRNGs is useful to you.  Whether you know it or not, PRNGs are everywhere.  Randomness is a simple concept, yet creating randomness is incredibly complex with massive amounts of money and research spent trying to do it right.  The consequences of poor randomness ensure that research into PRNGs will always continue.  Every time I play a game online and players blow off some unlikely occurrence with &ldquo;eh&hellip;RNG is RNG&rdquo;, I just think about Planet Poker and how that statement could very well be wrong.  Can you imagine playing against a player who knows all the cards that are out and what&rsquo;s coming?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/18/SQLinjection/">SQL Injection</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-18'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>What is SQL injection? The definition is remarkably simple.  For websites where users are allowed to enter input into entry fields (search forms, username fields, feedback forms&hellip;), malicious SQL statements can be entered instead and actually change the behavior of the query.  I have to admit I was a bit shocked upon reading just how simple SQL injections are in concept.  All it really takes to execute an SQL injection attack, is knowledge of writing SQL queries, guessing sensitive table names, and a website that has improper controls on input.  No special tools or programs are involved.  It is apparently one of the most prevalent methods of attacking websites, and wikipedia lists dozens of very public cases in recent years.</p>
+
+<p>Why is SQL injection bad?  A common example is using SQL injection in a username field to trick the query into returning &ldquo;true&rdquo; for everything, potentially giving back the entire table and not just the record for one username.  Of course if that information is passwords, SSNs, or credit card numbers, you get the idea&hellip;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SQL Query:
+</span><span class='line'>SELECT * FROM users WHERE name ='" + userName + "';
+</span><span class='line'>
+</span><span class='line'>expected userName input:
+</span><span class='line'>John
+</span><span class='line'>
+</span><span class='line'>Actual input:
+</span><span class='line'>' or '1'='1
+</span><span class='line'>
+</span><span class='line'>Final Query:
+</span><span class='line'>SELECT * FROM users WHERE name = '' OR '1'='1';</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, the input is a cleverly crafted input that is actually a SQL statement fragment. The query will always return true since 1 = 1, and it will return the data for all users since every name is essentially true.  SQL injections are not limited by just returning records, it is also possible to inject a DROP TABLE command and delete entire tables.</p>
+
+<p>How can you protect against SQL injection?  You must exercise some control over the input that is given by the user, to prevent &ldquo;code&rdquo; rather than the expected text from going all the way through to execution.</p>
+
+<p>Some methods:</p>
+
+<ul>
+<li>Blacklisting characters.</li>
+</ul>
+
+
+<p>By having a database of characters that have special function in SQL, you can escape certain characters to prevent acceptance of actual code from fields.  This can be a messy and error prone method however, and simply blacklisting characters entirely is not an elegant solution.</p>
+
+<ul>
+<li>Using parameterized statements.</li>
+</ul>
+
+
+<p>A parameterized statement is like a premade template, with default values that are substituted when users input their own text.  In this way the input is not fed directly to the SQL statement and can be checked first.  The placeholder text can only we overwritten with the proper input type, and fragments of SQL code will either be invalid altogether or treated as just funny looking text.</p>
+
+<ul>
+<li>Input validation and pattern matching.</li>
+</ul>
+
+
+<p>Input from the user is matched against a predefined set of rules governing length, syntax, types of characters, etc&hellip;so providing a weird looking partial SQL statement should fail to pass.</p>
+
+<ul>
+<li>Limiting permissions.</li>
+</ul>
+
+
+<p>For users that have access to the database, make sure they have access to only the relevent areas that they need.</p>
+
+<p>SQL injection is a major topic that I am still grappling to understand.  The basic concept is disturbingly simple, and it&rsquo;s not a surprise how often these happen as a result.  It seems the key is really making sure that website users have their inputs &ldquo;sanitized&rdquo; before any of it is used in a query.  The countermeasures are public and well known, I think it is a matter of the proper people learning to use the tools to prevent such attacks.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/13/rubyvariablesandscope/">Variables and Scope in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-13'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Variable scope refers to where in a program a particular variable is accessible.  Ruby has several different kinds of characters with different scope, each warrants considerations in how and when to use them.  Ruby has local, global, instance, and class variables.</p>
+
+<p>Local variable:</p>
+
+<p>These variables are &ldquo;local&rdquo; to the contruct in which they are defined.  They begin with a lowercase letter or underscore.  Top level/outside of all definitions is one local scope, classes and modules are a different scope, and methods are yet another scope.  Nesting in layers creates yet more local scopes.  Variables using the same name will not conflict with each other as long as their local scopes are distinct and separate.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">C</span>
+</span><span class='line'>    <span class="n">local_a</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">some_method</span>
+</span><span class='line'>        <span class="n">local_a</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="s2">&quot;from class local scope: </span><span class="si">#{</span><span class="n">local_a</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s2">&quot;from method inside the class: </span><span class="si">#{</span><span class="n">local_a</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">newC</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">newC</span><span class="o">.</span><span class="n">some_method</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># &quot;from method inside the class: 1&quot;</span>
+</span><span class='line'><span class="c1"># &quot;from class local scope: 2&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Global variable:</p>
+
+<p>These variables are accessible anywhere in the program once defined, and are prefixed with a $.  While sounding convenient, it is better practice to limit usage of global variables.  Since Ruby is object oriented, it is built around the concept of objects passing messages to each other.  Global variables conflict with general practices of trying to separate code into objects, and the wide accessibility makes it tough to compartmentalize code.  Simply put, too many objects know of it&rsquo;s existence and it has too much reach in your program.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$gVar</span> <span class="o">=</span> <span class="s2">&quot;defined outside class&quot;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">G</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">print_g</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="vg">$gVar</span>
+</span><span class='line'>        <span class="vg">$gVar</span> <span class="o">=</span> <span class="s2">&quot;yet accessible everywhere!&quot;</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="vg">$gVar</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">newG</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">newG</span><span class="o">.</span><span class="n">print_g</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># &quot;defined outside class&quot;</span>
+</span><span class='line'><span class="c1"># &quot;yet accessible everywhere!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Class variable:</p>
+
+<p>A variable that is shared by all instances of a class.  Defined with a @@ prefix, it is visible to all instances of the class but not to anything outside.  If this variable changes it changes for all instances.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Cars</span>
+</span><span class='line'>    <span class="vc">@@color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">change_color</span>
+</span><span class='line'>        <span class="vc">@@color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">print_color</span>
+</span><span class='line'>        <span class="nb">p</span> <span class="vc">@@color</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ford</span> <span class="o">=</span> <span class="no">Cars</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">ford</span><span class="o">.</span><span class="n">print_color</span>
+</span><span class='line'><span class="c1"># &quot;red&quot;</span>
+</span><span class='line'><span class="n">ford</span><span class="o">.</span><span class="n">change_color</span>
+</span><span class='line'><span class="n">ford</span><span class="o">.</span><span class="n">print_color</span>
+</span><span class='line'><span class="c1"># &quot;blue&quot;</span>
+</span><span class='line'><span class="n">honda</span> <span class="o">=</span> <span class="no">Cars</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">honda</span><span class="o">.</span><span class="n">print_color</span>
+</span><span class='line'><span class="c1"># &quot;blue&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instance variables:</p>
+
+<p>These variables are local and specific to a class instance object.  Each instance object will have it&rsquo;s own instance variable tied to it&rsquo;s existence.  Prefixed with a @, if an instance variable is changed it is changed for only that one instance and the other objects are unaffected, even if they have instance variables with the same name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Planes</span>
+</span><span class='line'>    <span class="kp">attr_accessor</span> <span class="ss">:color</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+</span><span class='line'>        <span class="vi">@color</span> <span class="o">=</span> <span class="n">color</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">boeing747</span> <span class="o">=</span> <span class="no">Planes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">concorde</span> <span class="o">=</span> <span class="no">Planes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">boeing747</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">p</span> <span class="n">boeing747</span><span class="o">.</span><span class="n">color</span>
+</span><span class='line'><span class="c1"># &quot;red&quot;</span>
+</span><span class='line'><span class="nb">p</span> <span class="n">concorde</span><span class="o">.</span><span class="n">color</span>
+</span><span class='line'><span class="c1"># &quot;blue&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Why do we care about scope?  For purposes of organization, clean code, and debugging, variable scope is important.  You generally want to make variables with the appropriate scope, so the objects and methods that use those variables can access them while they are still unknown to all else.  Since nearly everything in Ruby is an object, you want to limit each object&rsquo;s knowledge of variables to only the ones it will need.  Using variables with unnecessarily wide scope can lead to bugs that are harder to track and more difficult to fix.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/04/rubyclasses/">Using Classes With Game Items</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-04'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Classes in Ruby give the programmer ways to create many separate objects that all share similar behavior.  It is functionality that enables you to better organize your code.  While the behavior may be similar between objects, they still have their own individual identity and differences. Upon first learning of Classes, one of my first reactions was a feeling I&rsquo;ve seen this before somewhere.</p>
+
+<p>If there is one thing I&rsquo;ve done quite a lot over the years, it&rsquo;s play action rpgs.  Diablo, Titan Quest, Borderlands, Torchlight, Marvel Heroes&hellip;  A big draw of these games is a massive loot dropping system.  To me that sounds just like Classes, large numbers of very similar, but individually distinct objects!  I&rsquo;d like to do a thought experiment and see how Classes could be used to organize something as expansive as an item system.</p>
+
+<p>I feel Classes are an appropriate strategy to use for designing an item system.  For a fantasy setting as an example: health potions, armor, weapons, and consumable items should all have a selling price, and all have a name, etc&hellip;  An interesting property of Classes is single inheritance.  Each Class can inherit the properties and methods of a parent class.  Following that line of thought, a parent Item Class will have a few basic properties applicable to all Items, and then you can further subdivide more specific item Classes as children.  Consider the following (disclaimer, I&rsquo;m not sure I&rsquo;m properly using super keyword):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Items</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:buy</span><span class="p">,</span> <span class="ss">:sell</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">buy</span><span class="p">,</span> <span class="n">sell</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="vi">@buy</span> <span class="o">=</span> <span class="n">buy</span>
+</span><span class='line'>    <span class="vi">@sell</span> <span class="o">=</span> <span class="n">sell</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Equipment</span> <span class="o">&lt;</span> <span class="no">Items</span>
+</span><span class='line'>    <span class="kp">attr_accessor</span> <span class="ss">:durability</span><span class="p">,</span> <span class="ss">:rarity</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">buy</span><span class="p">,</span> <span class="n">sell</span><span class="p">,</span> <span class="n">durability</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">super</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">buy</span><span class="p">,</span> <span class="n">sell</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@durability</span> <span class="o">=</span> <span class="n">durability</span>
+</span><span class='line'>      <span class="vi">@rarity</span> <span class="o">=</span> <span class="n">rarity</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">roll_rarity</span>
+</span><span class='line'>      <span class="c1">#code to randomly determine the rarity,</span>
+</span><span class='line'>        <span class="n">rarer</span> <span class="n">items</span> <span class="o">=</span> <span class="n">more</span> <span class="n">powerful</span><span class="p">,</span> <span class="n">more</span> <span class="n">affixes</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Weapons</span> <span class="o">&lt;</span> <span class="no">Equipment</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:attack</span><span class="p">,</span> <span class="ss">:range</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">buy</span><span class="p">,</span> <span class="n">sell</span><span class="p">,</span> <span class="n">durability</span><span class="p">,</span>
+</span><span class='line'>                <span class="n">rarity</span><span class="p">,</span> <span class="n">attack</span><span class="p">,</span> <span class="n">range</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">super</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">buy</span><span class="p">,</span> <span class="n">sell</span><span class="p">,</span> <span class="n">durability</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@attack</span> <span class="o">=</span> <span class="n">attack</span>
+</span><span class='line'>    <span class="vi">@range</span> <span class="o">=</span> <span class="n">range</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">roll_weap_affixes</span>
+</span><span class='line'>    <span class="c1">#code to randomly choose affixes for weapons</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">short_sword</span> <span class="o">=</span> <span class="no">Weapons</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;short sword&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span>
+</span><span class='line'>                          <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;common&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'> <span class="c1">#a new weapon object called short_sword is created, with this following attributes:</span>
+</span><span class='line'><span class="vi">@name</span> <span class="o">=</span> <span class="s2">&quot;short_sword&quot;</span>
+</span><span class='line'><span class="vi">@buy</span> <span class="o">=</span> <span class="mi">50</span>
+</span><span class='line'><span class="vi">@sell</span> <span class="o">=</span> <span class="mi">25</span>
+</span><span class='line'><span class="vi">@durability</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span class='line'><span class="vi">@rarity</span> <span class="o">=</span> <span class="s2">&quot;common&quot;</span>
+</span><span class='line'><span class="vi">@attack</span> <span class="o">=</span> <span class="mi">100</span>
+</span><span class='line'><span class="vi">@range</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">short_sword</span><span class="o">.</span><span class="n">roll_rarity</span>
+</span><span class='line'><span class="n">short_sword</span><span class="o">.</span><span class="n">roll_weap_affixes</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For an example, the &ldquo;Items&rdquo; Class is a parent/superclass of &ldquo;Equipment&rdquo; which is the superclass of &ldquo;Weapons&rdquo;. The Class Weapons will inherit properties from both Items and Equipment, while also containing it&rsquo;s own.  You can also give each Class it&rsquo;s own methods, which are inherited downwards as well.  A .Weapon object will have it&rsquo;s own roll_weap_affixes method, but it will also know the roll_rarity method from it&rsquo;s superclass, and so on.  The end result is a short_sword item that has attributes from all 3 Classes, and can have methods called on it from any of the 3 classes as well.  This is a pretty crude example, but I think this is a reasonable applicable for Classes and it does illustrate how Classes can be scaled up further to encompass very large collections of data.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -291,15 +762,23 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/24/PRNGs/">Pseudo-Random Number Generators</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/18/SQLinjection/">SQL Injection</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/rubyvariablesandscope/">Variables and Scope in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/04/rubyclasses/">Using Classes With Game Items</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/30/rubycycle/">Ruby&#8217;s Enumerable#cycle Method</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/22/js/">Javascript Thoughts</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/14/firstblog/">CSS Classes Versus IDs</a>
       </li>
     
   </ul>
@@ -344,7 +823,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Daniel Yee -
+  Copyright &copy; 2015 - Daniel Yee -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
