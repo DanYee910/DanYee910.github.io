@@ -9,7 +9,7 @@
   <meta name="author" content="Daniel Yee">
 
   
-  <meta name="description" content="This topic was introduced to me by a friend many months ago, and I find it fascinating in it&rsquo;s importance, simplicity, and also difficulty. &hellip;">
+  <meta name="description" content="The concept of RESTful routes has always felt a bit muddled to me. At times it sounded simple and I tell myself &ldquo;I got it&rdquo;, but think a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,112 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/16/restfulroutes/">RESTful Routes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-16T04:41:00-08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:41 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The concept of RESTful routes has always felt a bit muddled to me.  At times it sounded simple and I tell myself &ldquo;I got it&rdquo;, but think a little harder and I get lost again.</p>
+
+<p>Representational State Transfer(REST), the words themselves really don&rsquo;t mean much to me and I&rsquo;m not sure what I&rsquo;m supposed to infer from them either.  The best explanations I can find generally run along these lines:</p>
+
+<p>REST is a suggested style or guideline to use certain HTTP verbs, URLs, and controller actions to design a web app.  For webapps that conform to the RESTful way of design, it is easier to predict and see what it is doing and which urls it is using.  It appears particularly suited for CRUD(create, read, update, destroy) apps.</p>
+
+<p>An example of RESTful routes:</p>
+
+<table>
+<thead>
+<tr>
+<th> HTTP verb </th>
+<th> URL              </th>
+<th> controller#action </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> GET    </td>
+<td> /blogposts          </td>
+<td> blogposts#index   </td>
+</tr>
+<tr>
+<td> POST   </td>
+<td> /blogposts          </td>
+<td> blogposts#create  </td>
+</tr>
+<tr>
+<td> GET    </td>
+<td> /blogposts/new      </td>
+<td> blogposts#new     </td>
+</tr>
+<tr>
+<td> GET    </td>
+<td> /blogposts/:id/edit </td>
+<td> blogposts#edit    </td>
+</tr>
+<tr>
+<td> GET    </td>
+<td> /blogposts/:id      </td>
+<td> blogposts#show    </td>
+</tr>
+<tr>
+<td> PATCH  </td>
+<td> /blogposts/:id      </td>
+<td> blogposts#update  </td>
+</tr>
+<tr>
+<td> PUT    </td>
+<td> /blogposts/:id      </td>
+<td> blogposts#update  </td>
+</tr>
+<tr>
+<td> DELETE </td>
+<td> /blogposts/:id      </td>
+<td> blogposts#destroy </td>
+</tr>
+</tbody>
+</table>
+
+
+<p><em>I hate markdown tables&hellip;</em></p>
+
+<p>GET /blogposts will hit the #index action of the blogposts controller, and generally is used to retrieve the list of all blogposts.</p>
+
+<p>POST /blogposts using the same route but with the POST verb it will use the #create action, usually to create a new individual blogpost, which will then have it&rsquo;s own page and id.</p>
+
+<p>GET /blogposts/new is a GET request to the #new method, to get a form for the creation of a new blogpost.</p>
+
+<p>GET /blogposts/:id/edit retrieves an edit page for the specific blogpost.</p>
+
+<p>GET /blogposts/:id retrieves a page to show what the specific blogpost is.</p>
+
+<p>PATCH and PUT blogposts/:id use the #update action, and are used to pass back the inputs from the retrieved edit form, and perform those actions on the server.</p>
+
+<p>DELETE blogposts/:id uses the delete action to delete the record corresponding to :id.</p>
+
+<p>Everything laid out above is useful for CRUD apps, not too surprising.  I think the biggest takeaway is that while you <em>can</em> name your urls, routes, and methods whatever you want, RESTful routing gives you a suggested convention.  If you follow RESTful convention, someone else should be able to see your code and figure it out without having to muck around too much.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -763,6 +869,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/16/restfulroutes/">RESTful Routes</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/24/PRNGs/">Pseudo-Random Number Generators</a>
       </li>
     
@@ -776,10 +886,6 @@
     
       <li class="post">
         <a href="/blog/2014/09/04/rubyclasses/">Using Classes With Game Items</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/30/rubycycle/">Ruby&#8217;s Enumerable#cycle Method</a>
       </li>
     
   </ul>
