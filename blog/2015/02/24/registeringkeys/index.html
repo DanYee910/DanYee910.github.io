@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Registering and Matching Key Press Sequences - Daniel Yee&#8217;s Blog</title>
+  <meta name="author" content="Daniel Yee">
+
+  
+  <meta name="description" content="A friend told me today of a problem that he was given. In the same vein as Street Fighter, write a couple functions that will register and match key &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://danyee910.github.io/blog/2015/02/24/registeringkeys">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Daniel Yee's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daniel Yee&#8217;s Blog</a></h1>
+  
+    <h2>My Coding and Web Dev Blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="danyee910.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Registering and Matching Key Press Sequences</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-24T16:23:00-08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:23 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A friend told me today of a problem that he was given.  In the same vein as Street Fighter, write a couple functions that will register and match key sequences to inputs.</p>
+
+<p>In Street Fighter:
+Down, Forward-Down, Forward, Punch = &ldquo;Hadoken&rdquo;</p>
+
+<p>So if you press &ldquo;Up, Down, Up, Down, Kick, Down, Forward-Down, Forward, Punch&rdquo;, you should end with a Hadoken.  Sounds pretty straightforward.</p>
+
+<p>In the same way, write 2 functions to:
+1. Register a key sequence to match inputs to
+2. On each key press, check for matching sequences</p>
+
+<p>I chose to approach this problem with Ruby.</p>
+
+<p>First off I tried to come up with several variables I would need.
+1. A &ldquo;database&rdquo;/library of sequences to match keys against.  The register function will add to this data structure.  I decided a Hash made the most sense here.
+2. An array to store key presses.  If the longest sequence is 8 characters, the most characters you would need to match against it is 8, so this &ldquo;history&rdquo; of keypresses is only as long as the greatest sequence.
+3. The length of the greatest sequence, because of #2 above.</p>
+
+<p>The result:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Keys</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">()</span>
+</span><span class='line'>    <span class="vi">@DB</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="vi">@keystorage</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="vi">@longest</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now to look at my methods.  Method register will take a key sequence and a name.  It needs to do 2 things, first obviously add this sequence to the library, and second if necessary I need to update the @longest variable.  This part was pretty simple.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">keys_pressed</span><span class="p">,</span> <span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@DB</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">=</span> <span class="n">keys_pressed</span>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@DB</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">].</span><span class="n">length</span> <span class="o">&gt;</span> <span class="vi">@longest</span>
+</span><span class='line'>      <span class="vi">@longest</span> <span class="o">=</span> <span class="vi">@DB</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">].</span><span class="n">length</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Onto the key press.  Lots more stuff here.  First, the program should only keep track of as many keys as necessary, if the longest sequence is only 5 characters, it&rsquo;s meaningless to store more than the last 5 characters pressed.  So to start:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">def</span> <span class="nf">on_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@keystorage</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="vi">@longest</span>
+</span><span class='line'>      <span class="vi">@keystorage</span><span class="o">.</span><span class="n">shift</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="vi">@keystorage</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we know the keys we are using to find matches, and we have a library of sequences to match against.  Now it&rsquo;s just a matter of finding any matches and returning them.  If the key history holds 5 character, and I&rsquo;m matching a 3 character sequence, just check that sequence against the last 3 characters.  If it matches, push the name of that sequence to an array.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">matches</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="vi">@DB</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="vi">@keystorage</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">matches</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When all is done, return any contents of that array.  Final code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Keys</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">()</span>
+</span><span class='line'>    <span class="vi">@DB</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="vi">@keystorage</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="vi">@longest</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">keys_pressed</span><span class="p">,</span> <span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@DB</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">=</span> <span class="n">keys_pressed</span>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@DB</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">].</span><span class="n">length</span> <span class="o">&gt;</span> <span class="vi">@longest</span>
+</span><span class='line'>      <span class="vi">@longest</span> <span class="o">=</span> <span class="vi">@DB</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">].</span><span class="n">length</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">on_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@keystorage</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="vi">@longest</span>
+</span><span class='line'>      <span class="vi">@keystorage</span><span class="o">.</span><span class="n">shift</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="vi">@keystorage</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">matches</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="vi">@DB</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="vi">@keystorage</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">matches</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">matches</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;here are your matches:&quot;</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="n">matches</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;no matches found&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">hello</span> <span class="o">=</span> <span class="no">Keys</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="o">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;firstmatch&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="o">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;testing&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="o">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;testingtwo&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="o">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="o">[</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;long&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#no matches</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">on_key</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#expect &#39;firstmatch&#39;</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">on_key</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#expect &#39;testing&#39; and &#39;testingtwo&#39;</span>
+</span><span class='line'><span class="n">hello</span><span class="o">.</span><span class="n">on_key</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Daniel Yee</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-02-24T16:23:00-08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:23 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://danyee910.github.io/blog/2015/02/24/registeringkeys/" data-via="" data-counturl="http://danyee910.github.io/blog/2015/02/24/registeringkeys/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/01/16/itemsindiablo2/" title="Previous Post: Looking back at items in Diablo 2">&laquo; Looking back at items in Diablo 2</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/24/registeringkeys/">Registering and Matching Key Press Sequences</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/16/itemsindiablo2/">Looking Back at Items in Diablo 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/16/restfulroutes/">RESTful Routes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/24/PRNGs/">Pseudo-Random Number Generators</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/18/SQLinjection/">SQL Injection</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/danyee910">@danyee910</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'danyee910',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Daniel Yee -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
